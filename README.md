@@ -46,4 +46,4 @@ In Proc. of the IEEE International Conference on Quantum Computing and Engineeri
 (QCE) 2021, Broomfield, CO, USA, October 18-22, 2021 (Fully virtual event).
 IEEE Computer Society 2021.
 [Accepted on July 31th, 2021]
- [bibtex](/paper-codes/2021-IQW/blob/master/Qiskit.bib)
+ [bibtex](/bibtex.bib)
