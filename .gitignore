@@ -1,4 +1,10 @@
 ###############
+# OTHER
+###############
+.dir-locals.el
+.python-version
+pyrightconfig.json
+###############
 # LATEX
 ###############
 auto/
