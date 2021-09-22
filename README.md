@@ -1,6 +1,6 @@
 # 2021-IQW
 Source code for paper [A Complete Quantum Circuit to Solve the Information Set
-Decoding Problem](#Authors and citations) submitted at 2021 IEEE Quantum Week
+Decoding Problem](#authors-and-citations) submitted at 2021 IEEE Quantum Week
 Conference. The bibtex is available at the end of the Readme.
 
 This repository is taken from the code available at
