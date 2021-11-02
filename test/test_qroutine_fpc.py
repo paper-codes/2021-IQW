@@ -57,8 +57,16 @@ class PopulationCountTestCase(CircuitTestCase):
         counts = len(res)
         self.assertEqual(counts, 1)
         exp_w = name.count("1")
-        state = res[0].state
-        self.assertEqual(state.lsb_int, exp_w)
+        if self.SIMULATOR == 'linalg':
+            # For QLM
+            for sample in res:
+                if sample.state.lsb_int == exp_w:
+                    self.assertEqual(sample.probability, 1)
+                    break
+        elif self.SIMULATOR == 'pylinalg':
+            # in myQLM, we get only one state
+            state = res[0].state
+            self.assertEqual(state.lsb_int, exp_w)
 
     @parameterized.expand([
         ("0on2", 0, 2),
