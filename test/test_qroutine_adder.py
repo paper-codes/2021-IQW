@@ -96,14 +96,18 @@ class AdderTestCase(CircuitTestCase):
                 expected = a_int + b_int
                 if not overflow:
                     expected %= 2**bits
-                expected_str = conversion.get_bitstring_from_int(
-                    expected, len(to_measure_qbits))
-                state = res[0].state
-                self.logger.debug("expected %s, having %s", expected_str,
-                                  state)
-                self.logger.debug("expected %d, having %d", expected,
-                                  state.state)
-                self.assertEqual(state.state, expected)
+                # expected_str = conversion.get_bitstring_from_int(
+                #     expected, len(to_measure_qbits))
+                if self.SIMULATOR == 'linalg':
+                    # For QLM
+                    for sample in res:
+                        if sample.state.lsb_int == expected:
+                            self.assertEqual(sample.probability, 1)
+                            break
+                elif self.SIMULATOR == 'pylinalg':
+                    # myQLM
+                    state = res[0].state
+                    self.assertEqual(state.state, expected)
 
     @parameterized.expand([
         (3, 2),
@@ -222,21 +226,17 @@ class AdderTestCase(CircuitTestCase):
                 # if not overflow:
                 # It also happen with overflow
                 expected %= 2**len(to_measure_qbits)
-                try:
-                    expected_str = conversion.get_bitstring_from_int(
-                        expected, len(to_measure_qbits))
-                except Exception:
-                    expected_str = ""
-                    self.logger.error(f">>>>>> {len(to_measure_qbits)}")
 
-                state = res[0].state
-                # self.draw_circuit(self.qc, circuit_name=f"{a_bits}, {b_bits},
-                # {a_int}, {b_int}, {little_endian}, {overflow}")
-                self.logger.debug("expected %s, having %s", expected_str,
-                                  state)
-                self.logger.debug("expected %d, having %d", expected,
-                                  state.state)
-                self.assertEqual(state.state, expected)
+                if self.SIMULATOR == 'linalg':
+                    # For QLM
+                    for sample in res:
+                        if sample.state.lsb_int == expected:
+                            self.assertEqual(sample.probability, 1)
+                            break
+                elif self.SIMULATOR == 'pylinalg':
+                    # myQLM
+                    state = res[0].state
+                    self.assertEqual(state.state, expected)
 
     @parameterized.expand([
         (4, 1),
@@ -300,21 +300,17 @@ class AdderTestCase(CircuitTestCase):
                 expected = a_int + b_int
                 # It also happen with overflow
                 expected %= 2**len(to_measure_qbits)
-                try:
-                    expected_str = conversion.get_bitstring_from_int(
-                        expected, len(to_measure_qbits))
-                except Exception:
-                    expected_str = ""
-                    self.logger.error(f">>>>>> {len(to_measure_qbits)}")
 
-                state = res[0].state
-                # self.draw_circuit(self.qc, circuit_name=f"{a_bits}, {b_bits},
-                # {a_int}, {b_int}, {little_endian}, {overflow}")
-                self.logger.debug("expected %s, having %s", expected_str,
-                                  state)
-                self.logger.debug("expected %d, having %d", expected,
-                                  state.state)
-                self.assertEqual(state.state, expected)
+                if self.SIMULATOR == 'linalg':
+                    # For QLM
+                    for sample in res:
+                        if sample.state.lsb_int == expected:
+                            self.assertEqual(sample.probability, 1)
+                            break
+                elif self.SIMULATOR == 'pylinalg':
+                    # myQLM
+                    state = res[0].state
+                    self.assertEqual(state.state, expected)
 
     @parameterized.expand([
         ("3_on_2bits", 3, 2),
@@ -380,18 +376,18 @@ class AdderTestCase(CircuitTestCase):
                 self.logger.debug("a_str %s", a_str)
                 self.logger.debug("a first half %s", term1_int)
                 self.logger.debug("a second half %s", term2_int)
-                expected_str = conversion.get_bitstring_from_int(
-                    term1_int + term2_int, half_bits + 1)
-                state = res[0].state
-                self.logger.debug("expected %s, having %s", expected_str,
-                                  state)
-
                 expected = term1_int + term2_int
-                # It also happen with overflow
                 expected %= 2**len(to_measure_qbits)
-                self.logger.debug("expected %d, having %d", expected,
-                                  state.state)
-                self.assertEqual(state.state, expected)
+                if self.SIMULATOR == 'linalg':
+                    # For QLM
+                    for sample in res:
+                        if sample.state.lsb_int == expected:
+                            self.assertEqual(sample.probability, 1)
+                            break
+                elif self.SIMULATOR == 'pylinalg':
+                    # myQLM
+                    state = res[0].state
+                    self.assertEqual(state.state, expected)
 
     @parameterized.expand([
         (1, 1),
@@ -465,16 +461,16 @@ class AdderTestCase(CircuitTestCase):
                     expected = 2**len(to_measure_qbits) + expected
                 if not overflow:
                     expected %= 2**bits
-                expected_str = conversion.get_bitstring_from_int(
-                    expected, len(to_measure_qbits))
-                state = res[0].state
-                self.logger.debug("expected %s, having %s", expected_str,
-                                  state)
-                self.logger.debug("expected %d, having %d", expected,
-                                  state.state)
-                # input("bbb")
-                # self.draw_circuit(self.qc, max_depth=0)
-                self.assertEqual(state.state, expected)
+                if self.SIMULATOR == 'linalg':
+                    # For QLM
+                    for sample in res:
+                        if sample.state.lsb_int == expected:
+                            self.assertEqual(sample.probability, 1)
+                            break
+                elif self.SIMULATOR == 'pylinalg':
+                    # myQLM
+                    state = res[0].state
+                    self.assertEqual(state.state, expected)
 
     @parameterized.expand([
         (1, 2),
@@ -514,9 +510,17 @@ class AdderTestCase(CircuitTestCase):
                 counts = len(res)
                 self.assertEqual(counts, 1)
                 expected = 1 if a_int < b_int else 0
-                actual = res[0].state.state
-                self.logger.debug("expected %s, actual %s", expected, actual)
-                self.assertEqual(actual, expected)
+                if self.SIMULATOR == 'linalg':
+                    # For QLM
+                    for sample in res:
+                        if sample.state.lsb_int == expected:
+                            self.assertEqual(sample.probability, 1)
+                            break
+                elif self.SIMULATOR == 'pylinalg':
+                    # myQLM
+                    actual = res[0].state.state
+                    self.logger.debug("expected %s, actual %s", expected, actual)
+                    self.assertEqual(actual, expected)
 
     @parameterized.expand([
         (0, 0),
@@ -555,12 +559,16 @@ class AdderTestCase(CircuitTestCase):
         counts = len(res)
         self.assertEqual(counts, 1)
         expected = a_int + b_int
-        expected_str = conversion.get_bitstring_from_int(
-            expected, len(to_measure_qbits))
-        state = res[0].state
-        self.logger.debug("expected %s, having %s", expected_str, state)
-        self.logger.debug("expected %d, having %d", expected, state.state)
-        self.assertEqual(state.state, expected)
+        if self.SIMULATOR == 'linalg':
+            # For QLM
+            for sample in res:
+                if sample.state.lsb_int == expected:
+                    self.assertEqual(sample.probability, 1)
+                    break
+        elif self.SIMULATOR == 'pylinalg':
+            # myQLM
+            state = res[0].state
+            self.assertEqual(state.state, expected)
 
     @parameterized.expand([
         (0, 0),
@@ -595,6 +603,13 @@ class AdderTestCase(CircuitTestCase):
         counts = len(res)
         self.assertEqual(counts, 1)
         expected = int(a_int > b_int)
-        state = res[0].state
-        self.logger.debug("expected %d, having %d", expected, state.state)
-        self.assertEqual(state.state, expected)
+        if self.SIMULATOR == 'linalg':
+            # For QLM
+            for sample in res:
+                if sample.state.lsb_int == expected:
+                    self.assertEqual(sample.probability, 1)
+                    break
+        elif self.SIMULATOR == 'pylinalg':
+            # myQLM
+            state = res[0].state
+            self.assertEqual(state.state, expected)
