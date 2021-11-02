@@ -91,14 +91,14 @@ class AdderTestCase(CircuitTestCase):
                     self.qc.to_circ().to_job(qubits=to_measure_qbits))
                 self.logger.debug("res %s", res)
 
-                counts = len(res.raw_data)
+                counts = len(res)
                 self.assertEqual(counts, 1)
                 expected = a_int + b_int
                 if not overflow:
                     expected %= 2**bits
                 expected_str = conversion.get_bitstring_from_int(
                     expected, len(to_measure_qbits))
-                state = res.raw_data[0].state
+                state = res[0].state
                 self.logger.debug("expected %s, having %s", expected_str,
                                   state)
                 self.logger.debug("expected %d, having %d", expected,
@@ -149,10 +149,10 @@ class AdderTestCase(CircuitTestCase):
                 res = self.qpu.submit(self.qc.to_circ().to_job())
                 self.logger.debug("res %s", res)
 
-                counts = len(res.raw_data)
+                counts = len(res)
                 self.assertEqual(counts, 1)
                 expected = 0
-                state = res.raw_data[0].state
+                state = res[0].state
 
                 self.logger.debug("expected %d, having %d", expected,
                                   state.state)
@@ -216,7 +216,7 @@ class AdderTestCase(CircuitTestCase):
                     self.qc.to_circ().to_job(qubits=to_measure_qbits))
                 self.logger.debug("res %s", res)
 
-                counts = len(res.raw_data)
+                counts = len(res)
                 self.assertEqual(counts, 1)
                 expected = a_int + b_int
                 # if not overflow:
@@ -229,7 +229,7 @@ class AdderTestCase(CircuitTestCase):
                     expected_str = ""
                     self.logger.error(f">>>>>> {len(to_measure_qbits)}")
 
-                state = res.raw_data[0].state
+                state = res[0].state
                 # self.draw_circuit(self.qc, circuit_name=f"{a_bits}, {b_bits},
                 # {a_int}, {b_int}, {little_endian}, {overflow}")
                 self.logger.debug("expected %s, having %s", expected_str,
@@ -295,7 +295,7 @@ class AdderTestCase(CircuitTestCase):
                     self.qc.to_circ().to_job(qubits=to_measure_qbits))
                 self.logger.debug("res %s", res)
 
-                counts = len(res.raw_data)
+                counts = len(res)
                 self.assertEqual(counts, 1)
                 expected = a_int + b_int
                 # It also happen with overflow
@@ -307,7 +307,7 @@ class AdderTestCase(CircuitTestCase):
                     expected_str = ""
                     self.logger.error(f">>>>>> {len(to_measure_qbits)}")
 
-                state = res.raw_data[0].state
+                state = res[0].state
                 # self.draw_circuit(self.qc, circuit_name=f"{a_bits}, {b_bits},
                 # {a_int}, {b_int}, {little_endian}, {overflow}")
                 self.logger.debug("expected %s, having %s", expected_str,
@@ -368,7 +368,7 @@ class AdderTestCase(CircuitTestCase):
                     self.qc.to_circ().to_job(qubits=to_measure_qbits))
                 self.logger.debug("res %s", res)
 
-                counts = len(res.raw_data)
+                counts = len(res)
                 self.assertEqual(counts, 1)
 
                 a_str = conversion.get_bitstring_from_int(
@@ -382,7 +382,7 @@ class AdderTestCase(CircuitTestCase):
                 self.logger.debug("a second half %s", term2_int)
                 expected_str = conversion.get_bitstring_from_int(
                     term1_int + term2_int, half_bits + 1)
-                state = res.raw_data[0].state
+                state = res[0].state
                 self.logger.debug("expected %s, having %s", expected_str,
                                   state)
 
@@ -458,7 +458,7 @@ class AdderTestCase(CircuitTestCase):
                     self.qc.to_circ().to_job(qubits=to_measure_qbits))
                 self.logger.debug("res %s", res)
 
-                counts = len(res.raw_data)
+                counts = len(res)
                 self.assertEqual(counts, 1)
                 expected = a_int - b_int
                 if expected < 0:
@@ -467,7 +467,7 @@ class AdderTestCase(CircuitTestCase):
                     expected %= 2**bits
                 expected_str = conversion.get_bitstring_from_int(
                     expected, len(to_measure_qbits))
-                state = res.raw_data[0].state
+                state = res[0].state
                 self.logger.debug("expected %s, having %s", expected_str,
                                   state)
                 self.logger.debug("expected %d, having %d", expected,
@@ -511,10 +511,10 @@ class AdderTestCase(CircuitTestCase):
                 res = self.qpu.submit(
                     self.qc.to_circ().to_job(qubits=[self.cout]))
                 self.logger.debug("res %s", res)
-                counts = len(res.raw_data)
+                counts = len(res)
                 self.assertEqual(counts, 1)
                 expected = 1 if a_int < b_int else 0
-                actual = res.raw_data[0].state.state
+                actual = res[0].state.state
                 self.logger.debug("expected %s, actual %s", expected, actual)
                 self.assertEqual(actual, expected)
 
@@ -552,12 +552,12 @@ class AdderTestCase(CircuitTestCase):
             self.qc.to_circ().to_job(qubits=to_measure_qbits))
         self.logger.debug("res %s", res)
 
-        counts = len(res.raw_data)
+        counts = len(res)
         self.assertEqual(counts, 1)
         expected = a_int + b_int
         expected_str = conversion.get_bitstring_from_int(
             expected, len(to_measure_qbits))
-        state = res.raw_data[0].state
+        state = res[0].state
         self.logger.debug("expected %s, having %s", expected_str, state)
         self.logger.debug("expected %d, having %d", expected, state.state)
         self.assertEqual(state.state, expected)
@@ -592,9 +592,9 @@ class AdderTestCase(CircuitTestCase):
         res = self.qpu.submit(circ.to_job(qubits=self.cout))
         self.logger.debug("res %s", res)
 
-        counts = len(res.raw_data)
+        counts = len(res)
         self.assertEqual(counts, 1)
         expected = int(a_int > b_int)
-        state = res.raw_data[0].state
+        state = res[0].state
         self.logger.debug("expected %d, having %d", expected, state.state)
         self.assertEqual(state.state, expected)

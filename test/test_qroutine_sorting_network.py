@@ -59,7 +59,7 @@ class SortingNetworkTestCase(CircuitTestCase):
         cr = self.pr.to_circ()
 
         res = self.simulate_program(self.pr, job_args={'qubits': self.qr})
-        obtained = res.raw_data[0].state.bitstring
+        obtained = res[0].state.bitstring
 
         is_sorted = all(obtained[i] <= obtained[i + 1]
                         for i in range(len(string) - 1))
@@ -90,7 +90,7 @@ class SortingNetworkTestCase(CircuitTestCase):
         # self.draw_circuit(cr, max_depth=2)
 
         res = self.simulate_program(self.pr, job_args={'qubits': self.qr})
-        obtained = res.raw_data[0].state.bitstring
+        obtained = res[0].state.bitstring
 
         is_sorted = all(obtained[i] <= obtained[i + 1]
                         for i in range(len(string) - 1))
@@ -109,7 +109,7 @@ class SortingNetworkTestCase(CircuitTestCase):
         self.pr.apply(qrout, self.qr, self.comps)
 
         res = self.simulate_program(self.pr, job_args={'qubits': self.qr})
-        obtained = res.raw_data[0].state.bitstring
+        obtained = res[0].state.bitstring
 
         is_sorted = all(obtained[i] <= obtained[i + 1]
                         for i in range(len(string) - 1))

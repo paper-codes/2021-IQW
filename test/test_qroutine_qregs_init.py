@@ -25,7 +25,7 @@ class QregInitTestCase(CircuitTestCase):
         prog.apply(qfun, qreg)
         # self.draw_program(prog, circ_kwargs={'do_link': False})
         res = self.qpu.submit(prog.to_circ().to_job())
-        state = res.raw_data[0].state.state
+        state = res[0].state.state
 
         if not little_endian:
             self.assertEqual(state, int_dec)

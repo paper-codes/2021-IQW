@@ -54,10 +54,10 @@ class PopulationCountTestCase(CircuitTestCase):
             qubits=[qb.index for qb in to_measure_qubits]))
         self.logger.debug("res %s", res)
 
-        counts = len(res.raw_data)
+        counts = len(res)
         self.assertEqual(counts, 1)
         exp_w = name.count("1")
-        state = res.raw_data[0].state
+        state = res[0].state
         self.assertEqual(state.lsb_int, exp_w)
 
     @parameterized.expand([
@@ -96,7 +96,7 @@ class PopulationCountTestCase(CircuitTestCase):
         res = self.qpu.submit(program.to_circ().to_job(qubits=[a, eq]))
         self.logger.debug("res %s", res)
 
-        counts = len(res.raw_data)
+        counts = len(res)
         self.assertEqual(counts, 2**len(a))
         total_actives = 0
         for sample in res:
