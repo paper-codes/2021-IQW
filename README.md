@@ -1,4 +1,7 @@
 # 2021-IQW
+[![DOI](https://zenodo.org/badge/394587143.svg)](https://zenodo.org/badge/latestdoi/394587143)
+
+
 Source code for paper [A Complete Quantum Circuit to Solve the Information Set
 Decoding Problem](#authors-and-citations) submitted at 2021 IEEE Quantum Week
 Conference. The bibtex is available at the end of the Readme.
